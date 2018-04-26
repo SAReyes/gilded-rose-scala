@@ -1,35 +1,15 @@
 package com.gildedrose
 
 class GildedRose(val items: Array[Item]) {
+
   import GildedRose._
 
   def updateQuality() {
     for (i <- items.indices) {
-      if (!items(i).name.equals(AGED_BRIE)
-        && !items(i).name.equals(BACKSTAGE_TICKET)) {
-        if (items(i).quality > 0) {
-          if (!items(i).name.equals(SULFURAS)) {
-            items(i).decreaseQuality()
-          }
-        }
-      } else {
-        if (items(i).quality < 50) {
-          items(i).increaseQuality()
-
-          if (items(i).name == BACKSTAGE_TICKET) {
-            if (items(i).sellIn < 11) {
-              if (items(i).quality < 50) {
-                items(i).increaseQuality()
-              }
-            }
-
-            if (items(i).sellIn < 6) {
-              if (items(i).quality < 50) {
-                items(i).increaseQuality()
-              }
-            }
-          }
-        }
+      if (items(i).deterioratesOverTime) {
+        items(i).decreaseQuality()
+      } else if (items(i).improvesOverTime) {
+        items(i).increaseQuality()
       }
 
       if (!items(i).name.equals(SULFURAS)) {
@@ -48,9 +28,7 @@ class GildedRose(val items: Array[Item]) {
             items(i).quality = items(i).quality - items(i).quality
           }
         } else {
-          if (items(i).quality < 50) {
-            items(i).increaseQuality()
-          }
+          items(i).increaseQuality()
         }
       }
     }
@@ -66,10 +44,33 @@ object GildedRose {
 }
 
 class ExtendedItem(value: Item) {
+
+  import GildedRose._
+
   def increaseQuality(): Unit = {
-    value.quality += 1
+    def innerIncrease(): Unit = {
+      value.quality = if (value.quality == 50) 50 else value.quality + 1
+    }
+
+    innerIncrease()
+
+    if (value.name == BACKSTAGE_TICKET) {
+      if (value.sellIn < 11) {
+        innerIncrease()
+      }
+
+      if (value.sellIn < 6) {
+        innerIncrease()
+      }
+    }
   }
+
   def decreaseQuality(): Unit = {
-    value.quality -= 1
+    value.quality = if (value.quality == 0) 0 else value.quality - 1
   }
+
+  def isLegendary: Boolean = value.name == SULFURAS
+  def improvesOverTime: Boolean = value.name == AGED_BRIE || value.name == BACKSTAGE_TICKET
+  def deterioratesOverTime: Boolean = isNotLegendary && !improvesOverTime
+  def isNotLegendary: Boolean = !isLegendary
 }

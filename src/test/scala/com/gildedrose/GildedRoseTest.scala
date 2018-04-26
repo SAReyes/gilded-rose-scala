@@ -7,6 +7,7 @@ class GildedRoseTest extends WordSpec with Matchers {
   val BASE_QUALITY = 25
   val BASE_SELL_IN = 20
   val MAX_QUALITY = 50
+  val SULFURAS_QUALITY = 80
 
   trait StandardItem {
     val items = Array(new Item(name = "Standrad Item", quality = BASE_QUALITY, sellIn = BASE_SELL_IN))
@@ -19,7 +20,7 @@ class GildedRoseTest extends WordSpec with Matchers {
   }
 
   trait Sulfuras {
-    val items = Array(new Item(name = "Sulfuras, Hand of Ragnaros", quality = BASE_QUALITY, sellIn = BASE_SELL_IN))
+    val items = Array(new Item(name = "Sulfuras, Hand of Ragnaros", quality = SULFURAS_QUALITY, sellIn = BASE_SELL_IN))
     val app = new GildedRose(items)
   }
 
@@ -91,7 +92,7 @@ class GildedRoseTest extends WordSpec with Matchers {
       "never decrease its quality" in new Sulfuras {
         app.updateQuality()
 
-        items.head.quality should be(BASE_QUALITY)
+        items.head.quality should be(SULFURAS_QUALITY)
       }
     }
   }
