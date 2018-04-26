@@ -12,23 +12,17 @@ class GildedRose(val items: Array[Item]) {
         items(i).increaseQuality()
       }
 
-      if (!items(i).name.equals(SULFURAS)) {
+      if (items(i).isNotLegendary) {
         items(i).sellIn = items(i).sellIn - 1
       }
 
       if (items(i).sellIn < 0) {
-        if (!items(i).name.equals(AGED_BRIE)) {
-          if (!items(i).name.equals(BACKSTAGE_TICKET)) {
-            if (items(i).quality > 0) {
-              if (!items(i).name.equals(SULFURAS)) {
-                items(i).decreaseQuality()
-              }
-            }
-          } else {
-            items(i).quality = items(i).quality - items(i).quality
-          }
-        } else {
+        if (items(i).name.equals(AGED_BRIE)) {
           items(i).increaseQuality()
+        } else if (items(i).name.equals(BACKSTAGE_TICKET)) {
+          items(i).quality = items(i).quality - items(i).quality
+        } else {
+          items(i).decreaseQuality()
         }
       }
     }
@@ -70,7 +64,10 @@ class ExtendedItem(value: Item) {
   }
 
   def isLegendary: Boolean = value.name == SULFURAS
+
   def improvesOverTime: Boolean = value.name == AGED_BRIE || value.name == BACKSTAGE_TICKET
+
   def deterioratesOverTime: Boolean = isNotLegendary && !improvesOverTime
+
   def isNotLegendary: Boolean = !isLegendary
 }
