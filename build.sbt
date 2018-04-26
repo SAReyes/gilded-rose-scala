@@ -2,6 +2,6 @@ name := "GildedRose"
 
 version := "1.0"
 
-scalaVersion := "2.11.8"
+scalaVersion := "2.12.1"
 
-libraryDependencies += "org.scalatest" % "scalatest_2.11" % "2.2.6"
+libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.1"
