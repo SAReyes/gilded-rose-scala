@@ -29,6 +29,11 @@ class GildedRoseTest extends WordSpec with Matchers {
     val app = new GildedRose(items)
   }
 
+  trait ConjuredItem {
+    val items = Array(new Item(name = "Conjured dagger", quality = BASE_QUALITY, sellIn = BASE_SELL_IN))
+    val app = new GildedRose(items)
+  }
+
   "A single item" when {
     "the day ends" should {
       "decrease its quality" in new StandardItem {
@@ -124,6 +129,23 @@ class GildedRoseTest extends WordSpec with Matchers {
         app.updateQuality()
 
         items.head.quality should be(0)
+      }
+    }
+  }
+
+  "A Conjured item" when {
+    "the day ends" should {
+      "decrease by two before the sell in date" in new ConjuredItem {
+       app.updateQuality()
+
+        items.head.quality should be(BASE_QUALITY - 2)
+      }
+      "decrease by four after the sell in date" in new ConjuredItem {
+        items.head.sellIn = 0
+
+        app.updateQuality()
+
+        items.head.quality should be(BASE_QUALITY - 4)
       }
     }
   }

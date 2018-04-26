@@ -60,7 +60,15 @@ class ExtendedItem(value: Item) {
   }
 
   def decreaseQuality(): Unit = {
-    value.quality = if (value.quality == 0) 0 else value.quality - 1
+    def innerDecrease(): Unit = {
+      value.quality = if (value.quality == 0) 0 else value.quality - 1
+    }
+
+    innerDecrease()
+
+    if(isConjured) {
+      innerDecrease()
+    }
   }
 
   def isLegendary: Boolean = value.name == SULFURAS
@@ -70,4 +78,6 @@ class ExtendedItem(value: Item) {
   def deterioratesOverTime: Boolean = isNotLegendary && !improvesOverTime
 
   def isNotLegendary: Boolean = !isLegendary
+
+  def isConjured: Boolean = value.name.startsWith("Conjured")
 }
